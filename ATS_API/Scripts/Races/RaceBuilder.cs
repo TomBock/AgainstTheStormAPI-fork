@@ -95,15 +95,15 @@ public class RaceBuilder
         model.description = Placeholders.Description;
         model.passiveEffectDesc = Placeholders.Description;
         model.order = 6;
-        model.assignAction = null; // Optional direct assignment shortcut
-        model.tag = CreateModelTag(name); //todo cache
-        model.malePrefab = null;
-        model.femalePrefab = null;
-        model.avatarClickSound = null;
-        model.ambientSounds = null;
-        model.favoringStartSound = null;
-        model.maleNames = new[] {"A", "B"};
-        model.femaleNames = new[] {"A", "B"};
+        model.assignAction = null; // Optional
+        model.tag = TagTypesExtensions.GetOrCreate($"[Tag] {name}");
+        model.malePrefab = null; //todo find in assetbundle
+        model.femalePrefab = null; //todo find in assetbundle
+        model.avatarClickSound = RacialPlaceholders.AvatarClickSound;
+        model.ambientSounds = RacialPlaceholders.AmbientSound;
+        model.favoringStartSound = RacialPlaceholders.FavoringStartSound;
+        model.maleNames = RacialPlaceholders.MaleNames;
+        model.femaleNames = RacialPlaceholders.FemaleNames;
         model.baseSpeed = 1.8f;
         model.initialResolve = 30f;
         model.minResolve = 0;
@@ -118,14 +118,14 @@ public class RaceBuilder
         model.reputationTresholdIncreasePerReputation = 0.03f;
         model.resolveToReputationRatio = 0.5f;
         model.populationToReputationRatio = 0.7f;
-        model.resilienceLabel = null; //todo
+        model.resilienceLabel = RacialPlaceholders.ResilienceLabel;
         model.needs = null; //todo
         model.racialHousingNeed = null; //todo
         model.needsInterval = 0f;
         model.hungerTolerance = 3;
-        model.hungerEffect = null;          //todo
-        model.homelessPenalty = null;       //todo
-        model.hostilityPenalty = null;      //todo
+        model.hungerEffect = RacialPlaceholders.HungerEffect;
+        model.homelessPenalty = null; // Optional
+        model.hostilityPenalty = null; // Optional
         model.initialEffects = null;        //todo
         model.characteristics = null;       //todo
         model.deathEffects = null;          //todo
@@ -135,7 +135,7 @@ public class RaceBuilder
         
         //todo setup as in GoodsManager?
         model.name = guid + "_" + name;
-        this.newModel = new CustomRace()
+        newModel = new CustomRace()
         {
             raceModel = model,
             id = GUIDManager.Get<RaceTypes>(guid, name)
