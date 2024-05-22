@@ -7,67 +7,74 @@ namespace ATS_API.Scripts.Races;
 
 public class RaceBuilder
 {
-    public string Name => model.raceModel.name;
+    public string Name => newModel.raceModel.name;
 
-    public CustomRace Race => model;
+    public CustomRace Race => newModel;
 
-    private readonly CustomRace model;
+    private readonly CustomRace newModel;
     private readonly string guid; // myGuid
     private readonly string name; // itemName
 
     public RaceBuilder Copy(RaceModel original)
     {
-        model.raceModel.icon = original.icon;
-        model.raceModel.roundIcon = original.roundIcon;
-        model.raceModel.widePortrait = original.widePortrait;
-        model.raceModel.lowResolveNewsIcon = original.lowResolveNewsIcon;
-        model.raceModel.raceResolveIcon = original.raceResolveIcon;
-        model.raceModel.isActive = original.isActive;
-        model.raceModel.isEssential = original.isEssential;
+       //newModel.raceModel.icon = original.icon;
+       //newModel.raceModel.roundIcon = original.roundIcon;
+       //newModel.raceModel.widePortrait = original.widePortrait;
+       //newModel.raceModel.lowResolveNewsIcon = original.lowResolveNewsIcon;
+       //newModel.raceModel.raceResolveIcon = original.raceResolveIcon;
+        newModel.raceModel.isActive = original.isActive;
+        newModel.raceModel.isEssential = original.isEssential;
         //model.raceModel.displayName = original.displayName;
-        model.raceModel.pluralName = original.pluralName;
-        model.raceModel.shortDescription = original.shortDescription;
-        model.raceModel.description = original.description;
-        model.raceModel.passiveEffectDesc = original.passiveEffectDesc;
-        model.raceModel.order = original.order;
-        model.raceModel.assignAction = original.assignAction;
-        model.raceModel.tag = original.tag;
-        model.raceModel.malePrefab = original.malePrefab;
-        model.raceModel.femalePrefab = original.femalePrefab;
-        model.raceModel.avatarClickSound = original.avatarClickSound;
-        model.raceModel.ambientSounds = original.ambientSounds;
-        model.raceModel.favoringStartSound = original.favoringStartSound;
-        model.raceModel.maleNames = original.maleNames;
-        model.raceModel.femaleNames = original.femaleNames;
-        model.raceModel.baseSpeed = original.baseSpeed;
-        model.raceModel.initialResolve = original.initialResolve;
-        model.raceModel.minResolve = original.minResolve;
-        model.raceModel.maxResolve = original.maxResolve;
-        model.raceModel.resolvePositveChangePerSec = original.resolvePositveChangePerSec;
-        model.raceModel.resolveNegativeChangePerSec = original.resolveNegativeChangePerSec;
-        model.raceModel.resolveNegativeChangeDiffFactor = original.resolveNegativeChangeDiffFactor;
-        model.raceModel.reputationPerSec = original.reputationPerSec;
-        model.raceModel.minPopulationToGainReputation = original.minPopulationToGainReputation;
-        model.raceModel.resolveForReputationTreshold = original.resolveForReputationTreshold;
-        model.raceModel.maxReputationFromResolvePerSec = original.maxReputationFromResolvePerSec;
-        model.raceModel.reputationTresholdIncreasePerReputation = original.reputationTresholdIncreasePerReputation;
-        model.raceModel.resolveToReputationRatio = original.resolveToReputationRatio;
-        model.raceModel.populationToReputationRatio = original.populationToReputationRatio;
-        model.raceModel.resilienceLabel = original.resilienceLabel;
-        model.raceModel.needs = original.needs;
-        model.raceModel.racialHousingNeed = original.racialHousingNeed;
-        model.raceModel.needsInterval = original.needsInterval;
-        model.raceModel.hungerTolerance = original.hungerTolerance;
-        model.raceModel.hungerEffect = original.hungerEffect;
-        model.raceModel.homelessPenalty = original.homelessPenalty;
-        model.raceModel.hostilityPenalty = original.hostilityPenalty;
-        model.raceModel.initialEffects = original.initialEffects;
-        model.raceModel.characteristics = original.characteristics;
-        model.raceModel.deathEffects = original.deathEffects;
-        model.raceModel.revealEffect = original.revealEffect;
-        model.raceModel.needsCategoriesLookup = original.needsCategoriesLookup;
-        model.raceModel.characteristicsCache = original.characteristicsCache;
+        //newModel.raceModel.pluralName = original.pluralName;
+        newModel.raceModel.shortDescription = original.shortDescription;
+        newModel.raceModel.description = original.description;
+        newModel.raceModel.passiveEffectDesc = original.passiveEffectDesc;
+        newModel.raceModel.order = original.order;
+        newModel.raceModel.assignAction = original.assignAction;
+        //newModel.raceModel.tag = original.tag;
+        newModel.raceModel.malePrefab = original.malePrefab;
+        newModel.raceModel.femalePrefab = original.femalePrefab;
+        newModel.raceModel.avatarClickSound = original.avatarClickSound;
+        newModel.raceModel.ambientSounds = original.ambientSounds;
+        newModel.raceModel.favoringStartSound = original.favoringStartSound;
+        newModel.raceModel.maleNames = original.maleNames;
+        newModel.raceModel.femaleNames = original.femaleNames;
+        newModel.raceModel.baseSpeed = original.baseSpeed;
+        newModel.raceModel.initialResolve = original.initialResolve;
+        newModel.raceModel.minResolve = original.minResolve;
+        newModel.raceModel.maxResolve = original.maxResolve;
+        newModel.raceModel.resolvePositveChangePerSec = original.resolvePositveChangePerSec;
+        newModel.raceModel.resolveNegativeChangePerSec = original.resolveNegativeChangePerSec;
+        newModel.raceModel.resolveNegativeChangeDiffFactor = original.resolveNegativeChangeDiffFactor;
+        newModel.raceModel.reputationPerSec = original.reputationPerSec;
+        newModel.raceModel.minPopulationToGainReputation = original.minPopulationToGainReputation;
+        newModel.raceModel.resolveForReputationTreshold = original.resolveForReputationTreshold;
+        newModel.raceModel.maxReputationFromResolvePerSec = original.maxReputationFromResolvePerSec;
+        newModel.raceModel.reputationTresholdIncreasePerReputation = original.reputationTresholdIncreasePerReputation;
+        newModel.raceModel.resolveToReputationRatio = original.resolveToReputationRatio;
+        newModel.raceModel.populationToReputationRatio = original.populationToReputationRatio;
+        newModel.raceModel.resilienceLabel = original.resilienceLabel;
+        newModel.raceModel.needs = original.needs;
+        newModel.raceModel.racialHousingNeed = original.racialHousingNeed;
+        newModel.raceModel.needsInterval = original.needsInterval;
+        newModel.raceModel.hungerTolerance = original.hungerTolerance;
+        newModel.raceModel.hungerEffect = original.hungerEffect;
+        newModel.raceModel.homelessPenalty = original.homelessPenalty;
+        newModel.raceModel.hostilityPenalty = original.hostilityPenalty;
+        newModel.raceModel.initialEffects = original.initialEffects;
+        newModel.raceModel.characteristics = original.characteristics;
+        newModel.raceModel.deathEffects = original.deathEffects;
+        newModel.raceModel.revealEffect = original.revealEffect;
+        newModel.raceModel.needsCategoriesLookup = original.needsCategoriesLookup;
+        newModel.raceModel.characteristicsCache = original.characteristicsCache;
         return this;
+    }
+
+    public ModelTag CreateModelTag(string name)
+    {
+        ModelTag tag = ScriptableObject.CreateInstance <ModelTag>();
+        tag.name = name;
+        return tag;
     }
     
     public RaceBuilder(string guid, string name, string iconPath)
@@ -75,21 +82,21 @@ public class RaceBuilder
         this.guid = guid;
         this.name = name;
         RaceModel model = ScriptableObject.CreateInstance <RaceModel>();
-        //model.icon = TextureHelper.GetImageAsSprite(iconPath, TextureHelper.SpriteType.RaceIcon);
-        //model.roundIcon = TextureHelper.GetImageAsSprite(iconPath, TextureHelper.SpriteType.RaceRoundIcon);
-        //model.widePortrait = TextureHelper.GetImageAsSprite(iconPath, TextureHelper.SpriteType.RaceWidePortrait);
-        //model.lowResolveNewsIcon = TextureHelper.GetImageAsSprite(iconPath, TextureHelper.SpriteType.RaceLowResolveNewsIcon);
-        //model.raceResolveIcon = TextureHelper.GetImageAsSprite(iconPath, TextureHelper.SpriteType.RaceResolveIcon);
+        model.icon = TextureHelper.GetImageAsSprite(iconPath + "_icon.png", TextureHelper.SpriteType.RaceIcon);
+        model.roundIcon = TextureHelper.GetImageAsSprite(iconPath + "_roundicon.png", TextureHelper.SpriteType.RaceRoundIcon);
+        model.widePortrait = TextureHelper.GetImageAsSprite(iconPath + "_wideportrait.png", TextureHelper.SpriteType.RaceWidePortrait);
+        model.lowResolveNewsIcon = TextureHelper.GetImageAsSprite(iconPath + "_lowresolvenewsicon.png", TextureHelper.SpriteType.RaceLowResolveNewsIcon);
+        model.raceResolveIcon = TextureHelper.GetImageAsSprite(iconPath + "_resolveicon.png", TextureHelper.SpriteType.RaceResolveIcon);
         model.isActive = true;
-        model.isEssential = true;
+        model.isEssential = false;
         model.displayName = Placeholders.DisplayName;
         model.pluralName = Placeholders.DisplayName;
         model.shortDescription = Placeholders.Description;
         model.description = Placeholders.Description;
         model.passiveEffectDesc = Placeholders.Description;
         model.order = 6;
-        model.assignAction = null;
-        model.tag = null;
+        model.assignAction = null; // Optional direct assignment shortcut
+        model.tag = CreateModelTag(name); //todo cache
         model.malePrefab = null;
         model.femalePrefab = null;
         model.avatarClickSound = null;
@@ -125,7 +132,10 @@ public class RaceBuilder
         model.revealEffect = null;          //todo
         model.needsCategoriesLookup = null; //todo
         model.characteristicsCache = null;
-        this.model = new CustomRace()
+        
+        //todo setup as in GoodsManager?
+        model.name = guid + "_" + name;
+        this.newModel = new CustomRace()
         {
             raceModel = model,
             id = GUIDManager.Get<RaceTypes>(guid, name)
@@ -134,7 +144,44 @@ public class RaceBuilder
     
     public RaceBuilder SetDisplayName(string text, SystemLanguage language = SystemLanguage.English)
     {
-        model.raceModel.displayName = LocalizationManager.ToLocaText(guid, name, "displayName", text, language);
+        newModel.raceModel.displayName = LocalizationManager.ToLocaText(guid, name, "displayName", text, language);
+        return this;
+    }
+    
+    public RaceBuilder SetPluralName(string text, SystemLanguage language = SystemLanguage.English)
+    {
+        newModel.raceModel.pluralName = LocalizationManager.ToLocaText(guid, name, "pluralName", text, language);
+        return this;
+    }
+
+    /// <summary>
+    /// Sets the priority 0 = Humans, 1 = Beavers, 2 = Lizards, 3 = Foxes, 3 = Harpy 
+    /// </summary>
+    public RaceBuilder SetOrder(int order)
+    {
+        newModel.raceModel.order = order;
+        return this;
+    }
+
+    public RaceBuilder SetDescription(string description, SystemLanguage language = SystemLanguage.English)
+    {
+        newModel.raceModel.description = LocalizationManager.ToLocaText(guid, name, "description", description, language);
+        if (newModel.raceModel.shortDescription == null || newModel.raceModel.shortDescription.key == Placeholders.Description.key)
+        {
+            newModel.raceModel.shortDescription = newModel.raceModel.description;
+        }
+
+        return this;
+    }
+    
+    public RaceBuilder SetShortDescription(string description, SystemLanguage language = SystemLanguage.English)
+    {
+        newModel.raceModel.shortDescription = LocalizationManager.ToLocaText(guid, name, "shortDescription", description, language);
+        if (newModel.raceModel.description == null || newModel.raceModel.description.key == Placeholders.Description.key)
+        {
+            newModel.raceModel.description = newModel.raceModel.shortDescription;
+        }
+
         return this;
     }
 }

@@ -41,11 +41,11 @@ public static class TextureHelper
         { SpriteType.EffectIcon, new Rect(0.0f, 0.0f, 128.0f, 128.0f) },
         { SpriteType.TraderIconLarge, new Rect(0.0f, 0.0f, 256.0f, 256.0f) },
         { SpriteType.TraderIconSmall, new Rect(0.0f, 0.0f, 63.0f, 63.0f) },
-        { SpriteType.RaceIcon, new Rect(0.0f, 0.0f, 63.0f, 63.0f) },
-        { SpriteType.RaceRoundIcon, new Rect(0.0f, 0.0f, 63.0f, 63.0f) },
-        { SpriteType.RaceWidePortrait, new Rect(0.0f, 0.0f, 63.0f, 63.0f) },
-        { SpriteType.RaceLowResolveNewsIcon, new Rect(0.0f, 0.0f, 63.0f, 63.0f) },
-        { SpriteType.RaceResolveIcon, new Rect(0.0f, 0.0f, 63.0f, 63.0f) },
+        { SpriteType.RaceIcon, new Rect(0.0f, 0.0f, 255.0f, 255.0f) },
+        { SpriteType.RaceRoundIcon, new Rect(0.0f, 0.0f, 255.0f, 255.0f) },
+        { SpriteType.RaceWidePortrait, new Rect(0.0f, 0.0f, 512.0f, 201.0f) },
+        { SpriteType.RaceLowResolveNewsIcon, new Rect(0.0f, 0.0f, 255.0f, 255.0f) },
+        { SpriteType.RaceResolveIcon, new Rect(0.0f, 0.0f, 128.0f, 128.0f) },
     };
 
     private static readonly Dictionary<SpriteType, Vector2> SPRITE_PIVOTS = new()
@@ -69,7 +69,8 @@ public static class TextureHelper
         {
             pixels[i] = Color.white;
         }
-
+        
+        
         texture.SetPixels(pixels);
         texture.Apply();
         return texture;

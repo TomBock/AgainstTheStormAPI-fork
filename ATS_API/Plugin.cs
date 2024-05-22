@@ -15,6 +15,8 @@ using Eremite;
 using Eremite.Controller;
 using Eremite.Model;
 using Eremite.Services;
+using Eremite.View.HUD;
+using Eremite.WorldMap.UI.CustomGames;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -84,6 +86,7 @@ public class Plugin : BaseUnityPlugin
         // DumpGoodsToJSON(MB.Settings.Goods, "Goods");
     }
 
+    private static CustomRace _newRace;
         
     [HarmonyPatch(typeof(MainController), nameof(MainController.OnServicesReady))]
     [HarmonyPostfix]
@@ -96,14 +99,22 @@ public class Plugin : BaseUnityPlugin
         Instance.Logger.LogInfo($"The game has loaded {MainController.Instance.Settings.effects.Length} effects.");
 
         
-        // ExportWikiInformation();
-        var foxes = SO.Settings.Races.Last();
-        var newRace = new RaceBuilder(PluginInfo.PLUGIN_GUID, "Alien", "Alien.png").Copy(foxes).Race;
-        SO.Settings.Races = SO.Settings.Races.AddItem(newRace.raceModel).ToArray();
         
+        // ExportWikiInformation();
+        var harpy = SO.Settings.Races.Last();
+        _newRace = new RaceBuilder(PluginInfo.PLUGIN_GUID, "Alien", "Xenomorph")
+                   .Copy(harpy)
+                   .SetDisplayName("Alien")
+                   .SetPluralName("Aliens")
+                   .SetDescription($"Xenomorphs are ")
+                   .Race;
+        
+        SO.Settings.Races = SO.Settings.Races.AddItem(_newRace.raceModel).ToArray();
+
+        var count = 0;
         foreach (var race in SO.Settings.Races)
         {
-            Instance.Logger.LogInfo($"{race}");
+            Instance.Logger.LogInfo($"RACE: {race} {count++}");
             
             Instance.Logger.LogInfo(race.ToNiceString());
             
@@ -125,5 +136,26 @@ public class Plugin : BaseUnityPlugin
         var isNewGame = MB.GameSaveService.IsNewGame();
         Instance.Logger.LogInfo($"Entered a game. Is this a new game: {isNewGame}.");
         // TextMeshProManager.Instantiate();
+        
+        foreach (var contentRace in GameMB.RacesService.Races)
+        {
+            Log.LogError($"RACES IN PLAY: {contentRace}");
+        }
+        
+    }
+    
+    [HarmonyPatch(typeof(CustomGameRacesPanel), nameof(CustomGameRacesPanel.SetUpSlots))]
+    [HarmonyPrefix]
+    private static bool HookEveryGameStart(CustomGameRacesPanel __instance)
+    {
+        SO.MetaStateService.Content.races.Add(_newRace.raceModel.Name);
+        var service = SO.MetaConditionsService;
+        foreach (RaceModel race in MB.Settings.Races)
+        {
+            bool isEssential = service.IsEssential(race.Name);
+            bool isInContent = Serviceable.MetaStateService.Content.races.Contains(race.Name);
+            Instance.Logger.LogError($"RACE: {race}, is unlocked: {MB.MetaConditionsService.IsUnlocked(race)}: {isEssential} or {isInContent}");
+        }
+        return true;
     }
 }
