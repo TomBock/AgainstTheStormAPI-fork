@@ -25,6 +25,11 @@ public static class TextureHelper
         EffectIcon = 0,
         TraderIconLarge = 1,
         TraderIconSmall = 2,
+        RaceIcon = 3,
+        RaceRoundIcon = 4,
+        RaceWidePortrait = 5,
+        RaceLowResolveNewsIcon = 6,
+        RaceResolveIcon = 7,
     };
 
     private static Vector2 DEFAULT_PIVOT = new(0.5f, 0.5f);
@@ -36,6 +41,11 @@ public static class TextureHelper
         { SpriteType.EffectIcon, new Rect(0.0f, 0.0f, 128.0f, 128.0f) },
         { SpriteType.TraderIconLarge, new Rect(0.0f, 0.0f, 256.0f, 256.0f) },
         { SpriteType.TraderIconSmall, new Rect(0.0f, 0.0f, 63.0f, 63.0f) },
+        { SpriteType.RaceIcon, new Rect(0.0f, 0.0f, 63.0f, 63.0f) },
+        { SpriteType.RaceRoundIcon, new Rect(0.0f, 0.0f, 63.0f, 63.0f) },
+        { SpriteType.RaceWidePortrait, new Rect(0.0f, 0.0f, 63.0f, 63.0f) },
+        { SpriteType.RaceLowResolveNewsIcon, new Rect(0.0f, 0.0f, 63.0f, 63.0f) },
+        { SpriteType.RaceResolveIcon, new Rect(0.0f, 0.0f, 63.0f, 63.0f) },
     };
 
     private static readonly Dictionary<SpriteType, Vector2> SPRITE_PIVOTS = new()
@@ -43,6 +53,11 @@ public static class TextureHelper
         { SpriteType.EffectIcon, DEFAULT_PIVOT },
         { SpriteType.TraderIconLarge, DEFAULT_PIVOT },
         { SpriteType.TraderIconSmall, DEFAULT_PIVOT },
+        { SpriteType.RaceIcon, DEFAULT_PIVOT },
+        { SpriteType.RaceRoundIcon, DEFAULT_PIVOT },
+        { SpriteType.RaceWidePortrait, DEFAULT_PIVOT },
+        { SpriteType.RaceLowResolveNewsIcon, DEFAULT_PIVOT },
+        { SpriteType.RaceResolveIcon, DEFAULT_PIVOT },
     };
     
     public static Texture2D GetWhiteTexture(SpriteType spriteType)

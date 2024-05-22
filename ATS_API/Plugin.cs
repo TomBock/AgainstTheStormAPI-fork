@@ -1,15 +1,21 @@
-﻿using ATS_API.Biomes;
+﻿using System.Linq;
+using System.Text;
+using ATS_API.Biomes;
 using ATS_API.Effects;
 using ATS_API.Goods;
 using ATS_API.Helpers;
+using ATS_API.Localization;
 using ATS_API.Orders;
+using ATS_API.Scripts.Races;
 using ATS_API.Traders;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using Eremite;
 using Eremite.Controller;
+using Eremite.Model;
 using Eremite.Services;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace ATS_API;
@@ -91,6 +97,23 @@ public class Plugin : BaseUnityPlugin
 
         
         // ExportWikiInformation();
+        var foxes = SO.Settings.Races.Last();
+        var newRace = new RaceBuilder(PluginInfo.PLUGIN_GUID, "Alien", "Alien.png").Copy(foxes).Race;
+        SO.Settings.Races = SO.Settings.Races.AddItem(newRace.raceModel).ToArray();
+        
+        foreach (var race in SO.Settings.Races)
+        {
+            Instance.Logger.LogInfo($"{race}");
+            
+            Instance.Logger.LogInfo(race.ToNiceString());
+            
+            //var convert = JsonConvert.SerializeObject(race, new JsonSerializerSettings()
+            //{
+            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            //});
+            //Instance.Logger.LogInfo($"{convert}");
+        }
+
     }
 
     [HarmonyPatch(typeof(GameController), nameof(GameController.StartGame))]
