@@ -9,9 +9,9 @@ namespace ATS_API.Scripts.Races;
 
 public class RacialPlaceholders
 {
-    public static readonly RacialSound AvatarClickSound = SO.Settings.Races.First().avatarClickSound;
-    public static readonly RacialSound AmbientSound = SO.Settings.Races.First().ambientSounds;
-    public static readonly SoundRef FavoringStartSound = SO.Settings.Races.First().favoringStartSound;
+    public static RacialSound AvatarClickSound => SO.Settings.Races.First().avatarClickSound;
+    public static RacialSound AmbientSound => SO.Settings.Races.First().ambientSounds;
+    public static SoundRef FavoringStartSound => SO.Settings.Races.First().favoringStartSound;
     // Create new object but not new key in case someone tries changing it
     public static string[] MaleNames => new[] {"A", "B"};
     // Create new object but not new key in case someone tries changing it

@@ -3,10 +3,10 @@ using Eremite.Model;
 
 namespace ATS_API.Scripts.Races;
 
-public class CustomRace : ASyncable <RaceModel>
+public class NewRace : ASyncable <RaceModel>
 {
     public RaceTypes id;
-    public RaceModel raceModel;
+    public RaceModel model;
 
     public override void Sync(RaceModel model)
     {

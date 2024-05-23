@@ -58,6 +58,31 @@ public class Plugin : BaseUnityPlugin
         Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
     }
 
+    private void CreateRaces()
+    {
+        _ = new RaceBuilder(PluginInfo.PLUGIN_GUID, "Shardling", "Xenomorph")
+            .Copy(RaceTypes.Harpy.ToRaceModel())
+            .SetDisplayName("Shardling")
+            .SetPluralName("Shardlings")
+            .SetDescription($"Shardlings are steadfast and enduring, excelling in mining (<sprite name=\"mining\">) and metallurgy (<sprite name=\"metallurgy\">). They thrive in rocky environments and are extremely resilient. While their stone-like bodies make them very slow, they have a unique affinity for storms, drawing energy from the chaotic weather.")
+            .SetNeeds(NeedTypes.Any_Housing, NeedTypes.Luxury, NeedTypes.Pickled_Goods, NeedTypes.Treatment) // Needs 8?
+            .SetRacialHousingNeed(NeedTypes.Human_Housing)
+            .SetCharacteristics(new RaceCharacteristicModel[]
+            {
+                new RaceCharacteristicBuilder(BuildingTagTypes.Tech)
+                    .SetEffect(VillagerPerkTypes.Proficiency),
+                new RaceCharacteristicBuilder(BuildingTagTypes.Wood)
+                    .SetEffect(VillagerPerkTypes.Proficiency)
+                //todo add global hearth effect?
+            });
+
+        Log.LogError($"RACES:");
+        foreach (var race in SO.Settings.Races)
+        {
+            Log.LogError($"{race}");
+        }
+    }
+
     private void LateUpdate()
     {
         GoodsManager.Tick();
@@ -66,6 +91,7 @@ public class Plugin : BaseUnityPlugin
         OrdersManager.Tick();
         BiomeManager.Tick();
         TextMeshProManager.Tick();
+        RaceManager.Tick();
         
         // TODO: PostTick to set up links between objects since we can't guarantee they will be loaded in roder.
     }
@@ -81,13 +107,12 @@ public class Plugin : BaseUnityPlugin
         OrdersManager.Instantiate();
         BiomeManager.Instantiate();
         TextMeshProManager.Instantiate();
+        RaceManager.Instantiate();
             
         // DumpPerksToJSON(MB.Settings.Relics, "Relics");
         // DumpPerksToJSON(MB.Settings.orders, "Orders");
         // DumpGoodsToJSON(MB.Settings.Goods, "Goods");
     }
-
-    private static CustomRace _newRace;
         
     [HarmonyPatch(typeof(MainController), nameof(MainController.OnServicesReady))]
     [HarmonyPostfix]
@@ -99,30 +124,12 @@ public class Plugin : BaseUnityPlugin
         Instance.Logger.LogInfo($"Performing game initialization on behalf of {PluginInfo.PLUGIN_GUID}.");
         Instance.Logger.LogInfo($"The game has loaded {MainController.Instance.Settings.effects.Length} effects.");
 
+        Instance.CreateRaces();
         
         
         // ExportWikiInformation();
         
-        // Add custom races like this:
-        var harpy = SO.Settings.Races.Last();
-        _newRace = new RaceBuilder(PluginInfo.PLUGIN_GUID, "Shardling", "Xenomorph")
-                   .Copy(harpy)
-                   .SetDisplayName("Shardling")
-                   .SetPluralName("Shardlings")
-                   .SetDescription($"Shardlings are steadfast and enduring, excelling in mining (<sprite name=\"mining\">) and metallurgy (<sprite name=\"metallurgy\">). They thrive in rocky environments and are extremely resilient. While their stone-like bodies make them very slow, they have a unique affinity for storms, drawing energy from the chaotic weather.")
-                   .SetNeeds(NeedTypes.Any_Housing, NeedTypes.Luxury, NeedTypes.Pickled_Goods, NeedTypes.Treatment) // Needs 8?
-                   .SetRacialHousingNeed(NeedTypes.Human_Housing)
-                   .SetCharacteristics(new RaceCharacteristicModel[]
-                   {
-                       new RaceCharacteristicBuilder(BuildingTagTypes.Tech)
-                           .SetEffect(VillagerPerkTypes.Proficiency),
-                       new RaceCharacteristicBuilder(BuildingTagTypes.Wood)
-                           .SetEffect(VillagerPerkTypes.Proficiency)
-                       //todo add global hearth effect?
-                   });
-        
-        SO.Settings.Races = SO.Settings.Races.AddItem(_newRace.raceModel).ToArray();
-
+        /*
         Log.LogError($"HERE YOU IDIOT");
         
         //foreach (var effect in SO.Settings.resolveEffects)
@@ -162,7 +169,19 @@ public class Plugin : BaseUnityPlugin
             //});
             //Instance.Logger.LogInfo($"{convert}");
         }
+        */
+    }
 
+    [HarmonyPatch(typeof(RacesService), nameof(RacesService.CacheRaces))]
+    [HarmonyPrefix]
+    private static bool HookCacheRaces()
+    {
+        foreach (var race in Serviceable.StateService.Conditions.races)
+        {
+            Log.LogError($"RACES: {race}");
+            Log.LogError($"RACES: {Serviceable.Settings.GetRace(race)}");
+        }
+        return true;
     }
 
     [HarmonyPatch(typeof(GameController), nameof(GameController.StartGame))]
@@ -175,17 +194,13 @@ public class Plugin : BaseUnityPlugin
         Instance.Logger.LogInfo($"Entered a game. Is this a new game: {isNewGame}.");
         // TextMeshProManager.Instantiate();
         
-        foreach (var contentRace in GameMB.RacesService.Races)
-        {
-            Log.LogError($"RACES IN PLAY: {contentRace}");
-        }
-        
     }
     
     [HarmonyPatch(typeof(CustomGameRacesPanel), nameof(CustomGameRacesPanel.SetUpSlots))]
     [HarmonyPrefix]
     private static bool HookEveryGameStart(CustomGameRacesPanel __instance)
     {
+        /*
         SO.MetaStateService.Content.races.Add(_newRace.raceModel.Name);
         var service = SO.MetaConditionsService;
         foreach (RaceModel race in MB.Settings.Races)
@@ -194,6 +209,7 @@ public class Plugin : BaseUnityPlugin
             bool isInContent = Serviceable.MetaStateService.Content.races.Contains(race.Name);
             Instance.Logger.LogError($"RACE: {race}, is unlocked: {MB.MetaConditionsService.IsUnlocked(race)}: {isEssential} or {isInContent}");
         }
+        */
         return true;
     }
 }
