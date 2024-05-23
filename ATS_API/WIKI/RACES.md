@@ -1,5 +1,15 @@
 ﻿# Custom Races
 
+TODO:
+- 
+RaceBuilder.cs
+- characteristics
+- deathEffects
+- revealEffects
+- Float values
+- Syncing
+
+Race Prefabs
 
 ## Race Icons
 

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using ATS_API.Helpers;
 using ATS_API.Localization;
 using Eremite;
 using Eremite.Model;
@@ -19,6 +20,5 @@ public class RacialPlaceholders
     public static LocaText ResilienceLabel => ResilienceLabelKey.ToLocaText();
     public static readonly string ResilienceLabelKey = LocalizationManager.NewString(PluginInfo.PLUGIN_GUID, "placeHolders", "resilienceLabel", "Missing Label");
 
-    public static readonly ResolveEffectModel HungerEffect =
-        SO.Settings.resolveEffects.FirstOrDefault(effect => effect.name == "Hunger Penalty");
+    public static ResolveEffectModel HungerEffect => ResolveEffectTypes.Hunger_Penalty.ToModel();
 }

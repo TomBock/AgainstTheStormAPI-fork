@@ -102,15 +102,28 @@ public class Plugin : BaseUnityPlugin
         
         // ExportWikiInformation();
         var harpy = SO.Settings.Races.Last();
-        _newRace = new RaceBuilder(PluginInfo.PLUGIN_GUID, "Alien", "Xenomorph")
+        _newRace = new RaceBuilder(PluginInfo.PLUGIN_GUID, "Shardling", "Xenomorph")
                    .Copy(harpy)
-                   .SetDisplayName("Alien")
-                   .SetPluralName("Aliens")
-                   .SetDescription($"Xenomorphs are ")
+                   .SetDisplayName("Shardling")
+                   .SetPluralName("Shardling")
+                   .SetDescription($"Shardlings are steadfast and enduring, excelling in mining (<sprite name=\"mining\">) and metallurgy (<sprite name=\"metallurgy\">). They thrive in rocky environments and are extremely resilient. While their stone-like bodies make them very slow, they have a unique affinity for storms, drawing energy from the chaotic weather.")
+                   .SetNeeds(NeedTypes.Any_Housing, NeedTypes.Luxury, NeedTypes.Pickled_Goods, NeedTypes.Treatment) // Needs 8?
+                   .SetRacialHousingNeed(NeedTypes.Human_Housing)
                    .Race;
         
         SO.Settings.Races = SO.Settings.Races.AddItem(_newRace.raceModel).ToArray();
 
+        Log.LogError($"HERE YOU IDIOT");
+        
+        //foreach (var effect in SO.Settings.resolveEffects)
+        //{
+        //    Log.LogWarning($"{effect},");
+        //}
+        foreach (var effect in SO.Settings.Races.SelectMany(race => race.characteristics))
+        {
+            Log.LogWarning($"Tag: {effect.tag}\nEffect: {effect.effect}\nGlobal: {effect.globalEffect}\nBuilding:{effect.buildingPerk}");
+        }
+        
         var count = 0;
         foreach (var race in SO.Settings.Races)
         {

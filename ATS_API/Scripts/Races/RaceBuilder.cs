@@ -1,6 +1,9 @@
-﻿using ATS_API.Helpers;
+﻿using System;
+using System.Linq;
+using ATS_API.Helpers;
 using ATS_API.Localization;
 using Eremite.Model;
+using HarmonyLib;
 using UnityEngine;
 
 namespace ATS_API.Scripts.Races;
@@ -119,14 +122,14 @@ public class RaceBuilder
         model.resolveToReputationRatio = 0.5f;
         model.populationToReputationRatio = 0.7f;
         model.resilienceLabel = RacialPlaceholders.ResilienceLabel;
-        model.needs = null; //todo
-        model.racialHousingNeed = null; //todo
-        model.needsInterval = 0f;
+        model.needs = [];
+        model.racialHousingNeed = NeedTypes.Any_Housing.ToModel(); //todo
+        model.needsInterval = 120f;
         model.hungerTolerance = 3;
         model.hungerEffect = RacialPlaceholders.HungerEffect;
-        model.homelessPenalty = null; // Optional
-        model.hostilityPenalty = null; // Optional
-        model.initialEffects = null;        //todo
+        model.homelessPenalty = null;       // Optional
+        model.hostilityPenalty = null;      // Optional
+        model.initialEffects = [];          // Optional
         model.characteristics = null;       //todo
         model.deathEffects = null;          //todo
         model.revealEffect = null;          //todo
@@ -141,10 +144,56 @@ public class RaceBuilder
             id = GUIDManager.Get<RaceTypes>(guid, name)
         };
     }
+    public RaceBuilder SetHostilityPenalty(ResolveEffectModel effectModel)
+    {
+        newModel.raceModel.hostilityPenalty = effectModel;
+        return this;
+    }
+    
+    public RaceBuilder SetHomelessPenalty(ResolveEffectModel effectModel)
+    {
+        newModel.raceModel.homelessPenalty = effectModel;
+        return this;
+    }
+    
+    public RaceBuilder SetHungerEffect(ResolveEffectModel effectModel)
+    {
+        newModel.raceModel.hungerEffect = effectModel;
+        return this;
+    }
+
     
     public RaceBuilder SetDisplayName(string text, SystemLanguage language = SystemLanguage.English)
     {
         newModel.raceModel.displayName = LocalizationManager.ToLocaText(guid, name, "displayName", text, language);
+        return this;
+    }
+
+    public RaceBuilder SetNeeds(params NeedTypes[] needTypes)
+    {
+        return SetNeeds(needTypes.Select(type => type.ToModel()).ToArray());
+    }
+
+    public RaceBuilder SetNeeds(params NeedModel[] needModels)
+    {
+        newModel.raceModel.needs = needModels;
+        return this;
+    }
+
+    public RaceBuilder SetNeedsInterval(float value)
+    {
+        newModel.raceModel.needsInterval = value;
+        return this;
+    }
+
+    public RaceBuilder SetRacialHousingNeed(NeedTypes type)
+    {
+        return SetRacialHousingNeed(type.ToModel());
+    }
+    
+    public RaceBuilder SetRacialHousingNeed(NeedModel needModel)
+    {
+        newModel.raceModel.racialHousingNeed = needModel;
         return this;
     }
     
