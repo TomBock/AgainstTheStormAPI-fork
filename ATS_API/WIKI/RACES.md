@@ -3,13 +3,15 @@
 TODO:
 - 
 RaceBuilder.cs
-- characteristics
+- characteristics: Global effects
 - deathEffects
 - revealEffects
 - Float values
 - Syncing
 
 Race Prefabs
+
+Add Metallurgy & Mining to appropriate buildings
 
 ## Race Icons
 

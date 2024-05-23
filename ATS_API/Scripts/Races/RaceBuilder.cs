@@ -10,6 +10,8 @@ namespace ATS_API.Scripts.Races;
 
 public class RaceBuilder
 {
+    public static implicit operator CustomRace(RaceBuilder builder) =>
+        builder.newModel;
     public string Name => newModel.raceModel.name;
 
     public CustomRace Race => newModel;
@@ -144,6 +146,13 @@ public class RaceBuilder
             id = GUIDManager.Get<RaceTypes>(guid, name)
         };
     }
+    
+    public RaceBuilder SetCharacteristics(params RaceCharacteristicModel[] characteristicModels)
+    {
+        newModel.raceModel.characteristics = characteristicModels;
+        return this;
+    }
+    
     public RaceBuilder SetHostilityPenalty(ResolveEffectModel effectModel)
     {
         newModel.raceModel.hostilityPenalty = effectModel;
