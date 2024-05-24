@@ -40,4 +40,12 @@ public static class ArrayExtensions
         Array.Resize(ref array, startingIndex + 1);
         array[startingIndex] = element;
     }
+
+    public static void ForEach <T>(this IEnumerable <T> enumerable, Action <T> action)
+    {
+        foreach (var t in enumerable)
+        {
+            action.Invoke(t);
+        }
+    }
 }

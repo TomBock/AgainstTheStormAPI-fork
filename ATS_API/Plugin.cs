@@ -1,24 +1,21 @@
 ﻿using System.Linq;
-using System.Text;
 using ATS_API.Biomes;
 using ATS_API.Effects;
 using ATS_API.Goods;
 using ATS_API.Helpers;
-using ATS_API.Localization;
 using ATS_API.Orders;
 using ATS_API.Scripts.Races;
 using ATS_API.Traders;
 using BepInEx;
 using BepInEx.Logging;
-using HarmonyLib;
 using Eremite;
-using Eremite.Characters.Villagers;
+using Eremite.Buildings;
+using Eremite.Buildings.UI;
 using Eremite.Controller;
 using Eremite.Model;
 using Eremite.Services;
-using Eremite.View.HUD;
 using Eremite.WorldMap.UI.CustomGames;
-using Newtonsoft.Json;
+using HarmonyLib;
 using UnityEngine;
 
 namespace ATS_API;
@@ -172,14 +169,17 @@ public class Plugin : BaseUnityPlugin
         */
     }
 
-    [HarmonyPatch(typeof(RacesService), nameof(RacesService.CacheRaces))]
+    [HarmonyPatch(typeof(RacesMenu), nameof(RacesMenu.SetUpSlot))]
     [HarmonyPrefix]
-    private static bool HookCacheRaces()
+    private static bool HookSetUpSlot(RacesMenu __instance, RacesMenuSlot slot, RaceModel race, int index)
     {
-        foreach (var race in Serviceable.StateService.Conditions.races)
+        bool canBePicked = __instance.CanBePicked(race);
+        var allowedRaces = __instance.allowedRaces;
+        bool getProfessionAmount = GameMB.VillagersService.GetDefaultProfessionAmount(race.Name) > 0;
+        Log.LogError($"RACES: SetUpSlots {race}, CanBePicked: {canBePicked}, getProfessionAmount: {getProfessionAmount}");
+        foreach (var allowedRace in allowedRaces)
         {
-            Log.LogError($"RACES: {race}");
-            Log.LogError($"RACES: {Serviceable.Settings.GetRace(race)}");
+            Log.LogWarning($"    Allowed Race: {allowedRace}");
         }
         return true;
     }
