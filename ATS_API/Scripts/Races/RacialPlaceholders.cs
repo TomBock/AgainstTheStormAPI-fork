@@ -20,5 +20,5 @@ public class RacialPlaceholders
     public static LocaText ResilienceLabel => ResilienceLabelKey.ToLocaText();
     public static readonly string ResilienceLabelKey = LocalizationManager.NewString(PluginInfo.PLUGIN_GUID, "placeHolders", "resilienceLabel", "Missing Label");
 
-    public static ResolveEffectModel HungerEffect => ResolveEffectTypes.Hunger_Penalty.ToModel();
+    public static ResolveEffectModel HungerEffect => ResolveEffectTypes.Hunger_Penalty.ToResolveEffectModel();
 }

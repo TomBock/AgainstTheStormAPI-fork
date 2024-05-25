@@ -15,6 +15,15 @@ public class ArraySync<ATS, API> where ATS : SO where API : ASyncable<ATS>
         m_Name = name;
     }
 
+
+    public List <API> Sync(
+        ref ATS[] array,
+        IEnumerable <API> newElements,
+        Func <API, ATS> getter)
+    {
+        return Sync(ref array, null, newElements, getter);
+    }
+
     public List<API> Sync(ref ATS[] array, ModelCache<ATS> settingsEffectsCache, IEnumerable<API> newElements, Func<API, ATS> getter)
     {
         if(m_baseLength < 0)
@@ -55,7 +64,8 @@ public class ArraySync<ATS, API> where ATS : SO where API : ASyncable<ATS>
         // }
         // Plugin.Log.LogInfo($"{m_Name} now has {array.Length} effects: {result}");
 
-        settingsEffectsCache.cache = null;
+        if(settingsEffectsCache != null)
+            settingsEffectsCache.cache = null;
         return pending;
     }
 }

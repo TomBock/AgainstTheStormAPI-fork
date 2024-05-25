@@ -52,71 +52,12 @@ public static partial class RaceManager
 
         Plugin.Log.LogInfo($"Syncing {s_newRaces.Count} new races");
         
+        
+        RaceHelpers.AddToWorkplaces(s_newRaces);
+        
         Settings settings = SO.Settings;
-        
-        // ProductionBuildings
-        foreach (var newRace in s_newRaces)
-        {
-            var newModel = newRace.model;
-            foreach (var building in settings.Buildings)
-            {
-                if (building is BlightPostModel blightPost)
-                {
-                    blightPost.workplaces.ForEach(model => model.allowedRaces = model.allowedRaces.ForceAdd(newModel));
-                }
-                else if (building is CampModel camp)
-                {
-                    camp.workplaces.ForEach(model => model.allowedRaces = model.allowedRaces.ForceAdd(newModel));
-                }
-                else if (building is CollectorModel collector)
-                {
-                    collector.workplaces.ForEach(model => model.allowedRaces = model.allowedRaces.ForceAdd(newModel));
-                }
-                else if (building is ExtractorModel extractor)
-                {
-                    extractor.workplaces.ForEach(model => model.allowedRaces = model.allowedRaces.ForceAdd(newModel));
-                }
-                else if (building is FarmModel farm)
-                {
-                    farm.workplaces.ForEach(model => model.allowedRaces = model.allowedRaces.ForceAdd(newModel));
-                }
-                else if (building is GathererHutModel gathererHut)
-                {
-                    gathererHut.workplaces.ForEach(model => model.allowedRaces = model.allowedRaces.ForceAdd(newModel));
-                }
-                else if (building is HearthModel hearth)
-                {
-                    hearth.workplaces.ForEach(model => model.allowedRaces = model.allowedRaces.ForceAdd(newModel));
-                }
-                else if (building is InstitutionModel institution)
-                {
-                    institution.workplaces.ForEach(model => model.allowedRaces = model.allowedRaces.ForceAdd(newModel));
-                }
-                else if (building is MineModel mine)
-                {
-                    mine.workplaces.ForEach(model => model.allowedRaces = model.allowedRaces.ForceAdd(newModel));
-                }
-                else if (building is RainCatcherModel rainCatcher)
-                {
-                    rainCatcher.workplaces.ForEach(model => model.allowedRaces = model.allowedRaces.ForceAdd(newModel));
-                }
-                else if (building is RelicModel relic)
-                {
-                    relic.workplaces.ForEach(model => model.allowedRaces = model.allowedRaces.ForceAdd(newModel));
-                }
-                else if (building is StorageModel storage)
-                {
-                    storage.workplaces.ForEach(model => model.allowedRaces = model.allowedRaces.ForceAdd(newModel));
-                }
-                else if (building is WorkshopModel workshop)
-                {
-                    workshop.workplaces.ForEach(model => model.allowedRaces = model.allowedRaces.ForceAdd(newModel));
-                }
-            }
-        }
-        
         s_races.Sync(ref settings.Races, settings.racesCache, s_newRaces, a => a.model);
-
+        
         MetaStateService stateService = (MetaStateService)SO.MetaStateService;
         foreach (var newRace in s_newRaceNames)
         {
@@ -166,7 +107,7 @@ public static partial class RaceManager
         model.populationToReputationRatio = 0.7f;
         model.resilienceLabel = RacialPlaceholders.ResilienceLabel;
         model.needs = [];
-        model.racialHousingNeed = NeedTypes.Any_Housing.ToModel();
+        model.racialHousingNeed = NeedTypes.Any_Housing.ToNeedModel();
         model.needsInterval = 120f;
         model.hungerTolerance = 3;
         model.hungerEffect = RacialPlaceholders.HungerEffect;

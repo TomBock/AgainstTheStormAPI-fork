@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
-using ATS_API.Effects;
+﻿using System.Linq;
 using ATS_API.Helpers;
 using ATS_API.Localization;
 using Eremite.Model;
-using HarmonyLib;
 using UnityEngine;
 
 namespace ATS_API.Scripts.Races;
@@ -83,16 +80,133 @@ public class RaceBuilder
         newRace = RaceManager.New(guid, name, iconPrefix);
     }
 
+    public RaceBuilder SetBaseSpeed(float speed)
+    {
+        newRace.model.baseSpeed = speed;
+        return this;
+    }
+    
+    public RaceBuilder SetInitialResolve(float value)
+    {
+        newRace.model.initialResolve = value;
+        return this;
+    }
+    
+    public RaceBuilder SetMinResolve(float value)
+    {
+        newRace.model.minResolve = value;
+        return this;
+    }
+    
+    public RaceBuilder SetMaxResolve(float value)
+    {
+        newRace.model.maxResolve = value;
+        return this;
+    }
+    
+    public RaceBuilder SetResolvePositiveChangePerSec(float value)
+    {
+        newRace.model.resolvePositveChangePerSec = value;
+        return this;
+    }
+    
+    public RaceBuilder SetResolveNegativeChangePerSec(float value)
+    {
+        newRace.model.resolveNegativeChangePerSec = value;
+        return this;
+    }
+    
+    public RaceBuilder SetResolveNegativeChangeDiffFactor(float value)
+    {
+        newRace.model.resolveNegativeChangeDiffFactor = value;
+        return this;
+    }
+    
+    public RaceBuilder SetReputationPerSec(float value)
+    {
+        newRace.model.reputationPerSec = value;
+        return this;
+    }
+    
+    public RaceBuilder SetMinPopulationToGainReputation(int value)
+    {
+        newRace.model.minPopulationToGainReputation = value;
+        return this;
+    }
+    
+    public RaceBuilder SetResolveForReputationThreshold(Vector2 values)
+    {
+        newRace.model.resolveForReputationTreshold = values;
+        return this;
+    }
+    
+    public RaceBuilder SetMaxReputationFromResolvePerSec(float value)
+    {
+        newRace.model.maxReputationFromResolvePerSec = value;
+        return this;
+    }
+    
+    public RaceBuilder SetReputationThresholdIncreasePerReputation(float value)
+    {
+        newRace.model.reputationTresholdIncreasePerReputation = value;
+        return this;
+    }
+    
+    public RaceBuilder SetResolveToReputationRatio(float value)
+    {
+        newRace.model.resolveToReputationRatio = value;
+        return this;
+    }
+    
+    public RaceBuilder SetPopulationToReputationRatio(float value)
+    {
+        newRace.model.populationToReputationRatio = value;
+        return this;
+    }
+    
+    public RaceBuilder SetResilienceLabel(LocaText value)
+    {
+        newRace.model.resilienceLabel = value;
+        return this;
+    }
+    
+    public RaceBuilder SetHungerTolerance(int value)
+    {
+        newRace.model.hungerTolerance = value;
+        return this;
+    }
+
+    public RaceBuilder SetInitialEffects(params ResolveEffectTypes[] effectModels)
+    {
+        return SetInitialEffects(effectModels.Select(m => m.ToResolveEffectModel()).ToArray());
+    }
+    
+    public RaceBuilder SetInitialEffects(params ResolveEffectModel[] effectModels)
+    {
+        newRace.model.initialEffects = effectModels;
+        return this;
+    }
+
     public RaceBuilder SetDeathEffect(params EffectModel[] effectModels)
     {
         newRace.model.deathEffects = effectModels;
         return this;
     }
 
+    public RaceBuilder SetDeathEffect(params EffectTypes[] effectTypes)
+    {
+        return SetDeathEffect(effectTypes.Select(type => type.ToEffectModel()).ToArray());
+    }
+
     public RaceBuilder SetRevealEffects(EffectModel effectModel)
     {
         newRace.model.revealEffect = effectModel;
         return this;
+    }
+
+    public RaceBuilder SetRevealEffects(EffectTypes effectTypes)
+    {
+        return SetRevealEffects(effectTypes.ToEffectModel());
     }
     
     public RaceBuilder SetCharacteristics(params RaceCharacteristicModel[] characteristicModels)
@@ -107,16 +221,31 @@ public class RaceBuilder
         return this;
     }
     
+    public RaceBuilder SetHostilityPenalty(ResolveEffectTypes effectTypes)
+    {
+        return SetHostilityPenalty(effectTypes.ToResolveEffectModel());
+    }
+    
     public RaceBuilder SetHomelessPenalty(ResolveEffectModel effectModel)
     {
         newRace.model.homelessPenalty = effectModel;
         return this;
     }
     
+    public RaceBuilder SetHomelessPenalty(ResolveEffectTypes effectTypes)
+    {
+        return SetHomelessPenalty(effectTypes.ToResolveEffectModel());
+    }
+    
     public RaceBuilder SetHungerEffect(ResolveEffectModel effectModel)
     {
         newRace.model.hungerEffect = effectModel;
         return this;
+    }
+    
+    public RaceBuilder SetHungerEffect(ResolveEffectTypes effectTypes)
+    {
+        return SetHungerEffect(effectTypes.ToResolveEffectModel());
     }
 
     
@@ -128,7 +257,7 @@ public class RaceBuilder
 
     public RaceBuilder SetNeeds(params NeedTypes[] needTypes)
     {
-        return SetNeeds(needTypes.Select(type => type.ToModel()).ToArray());
+        return SetNeeds(needTypes.Select(type => type.ToNeedModel()).ToArray());
     }
 
     public RaceBuilder SetNeeds(params NeedModel[] needModels)
@@ -145,7 +274,7 @@ public class RaceBuilder
 
     public RaceBuilder SetRacialHousingNeed(NeedTypes type)
     {
-        return SetRacialHousingNeed(type.ToModel());
+        return SetRacialHousingNeed(type.ToNeedModel());
     }
     
     public RaceBuilder SetRacialHousingNeed(NeedModel needModel)
@@ -188,6 +317,13 @@ public class RaceBuilder
             newRace.model.description = newRace.model.shortDescription;
         }
 
+        return this;
+    }
+
+    public RaceBuilder CopyPrefab(RaceModel race)
+    {
+        newRace.model.malePrefab = race.malePrefab;
+        newRace.model.femalePrefab = race.femalePrefab;
         return this;
     }
 }

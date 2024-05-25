@@ -30,6 +30,7 @@ public static class TextureHelper
         RaceWidePortrait = 5,
         RaceLowResolveNewsIcon = 6,
         RaceResolveIcon = 7,
+        NeedOverrideIcon = 8,
     };
 
     private static Vector2 DEFAULT_PIVOT = new(0.5f, 0.5f);
@@ -46,6 +47,7 @@ public static class TextureHelper
         { SpriteType.RaceWidePortrait, new Rect(0.0f, 0.0f, 512.0f, 201.0f) },
         { SpriteType.RaceLowResolveNewsIcon, new Rect(0.0f, 0.0f, 255.0f, 255.0f) },
         { SpriteType.RaceResolveIcon, new Rect(0.0f, 0.0f, 128.0f, 128.0f) },
+        { SpriteType.NeedOverrideIcon, new Rect(0.0f, 0.0f, 128.0f, 128.0f) },
     };
 
     private static readonly Dictionary<SpriteType, Vector2> SPRITE_PIVOTS = new()
@@ -58,6 +60,7 @@ public static class TextureHelper
         { SpriteType.RaceWidePortrait, DEFAULT_PIVOT },
         { SpriteType.RaceLowResolveNewsIcon, DEFAULT_PIVOT },
         { SpriteType.RaceResolveIcon, DEFAULT_PIVOT },
+        { SpriteType.NeedOverrideIcon, DEFAULT_PIVOT },
     };
     
     public static Texture2D GetWhiteTexture(SpriteType spriteType)

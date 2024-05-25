@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ATS_API.Biomes;
 using ATS_API.Effects;
 using ATS_API.Goods;
 using ATS_API.Helpers;
+using ATS_API.Localization;
 using ATS_API.Orders;
+using ATS_API.Scripts.Needs;
 using ATS_API.Scripts.Races;
 using ATS_API.Traders;
 using BepInEx;
@@ -13,6 +16,7 @@ using Eremite.Buildings;
 using Eremite.Buildings.UI;
 using Eremite.Controller;
 using Eremite.Model;
+using Eremite.Model.Needs;
 using Eremite.Services;
 using Eremite.WorldMap.UI.CustomGames;
 using HarmonyLib;
@@ -57,12 +61,28 @@ public class Plugin : BaseUnityPlugin
 
     private void CreateRaces()
     {
-        _ = new RaceBuilder(PluginInfo.PLUGIN_GUID, "Shardling", "Xenomorph")
-            .Copy(RaceTypes.Harpy.ToRaceModel())
+        /*
+        NewNeed metal = new NeedsBuilder(PluginInfo.PLUGIN_GUID, "Metal").
+                   SetGoodPresentation(
+                       GoodsTypes.Ale.ToString().ToGoodsModel(),
+                       "Shardlings thrive on Ale".ToLocaText()).
+                   SetCategory(NeedCategoryTypes.Food_Need_Category.ToName().ToNeedCategoryModel()).
+                   SetEffect(ResolveEffectTypes.Motivated.ToResolveEffectModel());
+        */
+        
+        
+        _ = new RaceBuilder(PluginInfo.PLUGIN_GUID, "Shardling", "Shardling")
+            .CopyPrefab(RaceTypes.Harpy.ToRaceModel())
+            //.Copy(RaceTypes.Harpy.ToRaceModel())
             .SetDisplayName("Shardling")
             .SetPluralName("Shardlings")
             .SetDescription($"Shardlings are steadfast and enduring, excelling in mining (<sprite name=\"mining\">) and metallurgy (<sprite name=\"metallurgy\">). They thrive in rocky environments and are extremely resilient. While their stone-like bodies make them very slow, they have a unique affinity for storms, drawing energy from the chaotic weather.")
-            .SetNeeds(NeedTypes.Any_Housing, NeedTypes.Luxury, NeedTypes.Pickled_Goods, NeedTypes.Treatment) // Needs 8?
+            .SetNeeds(
+                NeedTypes.Any_Housing.ToName().ToNeedModel(), 
+                NeedTypes.Luxury.ToName().ToNeedModel(), 
+                NeedTypes.Pickled_Goods.ToName().ToNeedModel(), 
+                NeedTypes.Treatment.ToName().ToNeedModel()/*,
+                metal.model*/) // Needs 8?
             .SetRacialHousingNeed(NeedTypes.Human_Housing)
             .SetCharacteristics(new RaceCharacteristicModel[]
             {
@@ -71,12 +91,33 @@ public class Plugin : BaseUnityPlugin
                 new RaceCharacteristicBuilder(BuildingTagTypes.Wood)
                     .SetEffect(VillagerPerkTypes.Proficiency)
                 //todo add global hearth effect?
-            });
-
-        Log.LogError($"RACES:");
-        foreach (var race in SO.Settings.Races)
+            })
+            .SetInitialEffects(ResolveEffectTypes.Vitality)
+            .SetDeathEffect(EffectTypes.Bricks_4)
+            .SetRevealEffects(EffectTypes.Stone_3pm)
+            .SetHungerEffect(ResolveEffectTypes.Hunger_Penalty);
+        
+        Log.LogError($"HERE YOU IDIOT:");
+        foreach (var race in SO.Settings.Needs.Where(n => n.category.name == NeedCategoryTypes.Services_Need_Category.ToName()).Distinct())
         {
-            Log.LogError($"{race}");
+            Log.LogError($"{race}. {race.GetType()}. {race.presentation}, {race.presentation.GetType()}");
+        }
+        
+        foreach (var race in SO.Settings.Needs.Select(n => n.presentation).Distinct())
+        {
+            if (race is GoodPresentationModel gp)
+            {
+                Log.LogError($"{gp}\n{gp.GetType()}\nIcon: {gp.overrideIcon}{gp.GetIcon()}{gp.GetIcon().rect}\n{gp.good}\n{gp.description}\n{gp.formatDescription}");
+            }
+            else if(race is HousePresentationModel hp)
+            {
+                Log.LogError($"{hp}\n{hp.GetType()}\nIcon: {hp.overrideIcon}{hp.GetIcon()}\n{hp.houses}");
+            }
+            else
+            {
+                Log.LogError($"{race}, {race.GetType()}, {race.overrideIcon}");
+            }
+            //Log.LogError($"{race}. {race.GetType()}\n{race.missingThought}\n{race.orderDescription}\n{race.overrideIcon}\n{race.IsGoodBased}");
         }
     }
 
@@ -88,6 +129,7 @@ public class Plugin : BaseUnityPlugin
         OrdersManager.Tick();
         BiomeManager.Tick();
         TextMeshProManager.Tick();
+        NeedsManager.Tick();
         RaceManager.Tick();
         
         // TODO: PostTick to set up links between objects since we can't guarantee they will be loaded in roder.
@@ -104,6 +146,7 @@ public class Plugin : BaseUnityPlugin
         OrdersManager.Instantiate();
         BiomeManager.Instantiate();
         TextMeshProManager.Instantiate();
+        NeedsManager.Instantiate();
         RaceManager.Instantiate();
             
         // DumpPerksToJSON(MB.Settings.Relics, "Relics");
