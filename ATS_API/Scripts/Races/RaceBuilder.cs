@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ATS_API.Helpers;
 using ATS_API.Localization;
 using Eremite.Model;
@@ -320,10 +321,36 @@ public class RaceBuilder
         return this;
     }
 
-    public RaceBuilder CopyPrefab(RaceModel race)
+    public RaceBuilder CopyPrefabs(RaceModel race)
     {
         newRace.model.malePrefab = race.malePrefab;
         newRace.model.femalePrefab = race.femalePrefab;
+        return this;
+    }
+
+    public RaceBuilder CopySounds(RaceModel race)
+    {
+        newRace.model.avatarClickSound = race.avatarClickSound;
+        newRace.model.ambientSounds = race.ambientSounds;
+        newRace.model.favoringStartSound = race.favoringStartSound;
+        return this;
+    }
+    
+    public RaceBuilder SetMaleNames(string[] names)
+    {
+        newRace.model.maleNames = names;
+        return this;
+    }
+    
+    public RaceBuilder SetFemaleNames(string[] names)
+    {
+        newRace.model.femaleNames = names;
+        return this;
+    }
+
+    public RaceBuilder CopyAssignAction(RaceModel race)
+    {
+        newRace.model.assignAction = race.assignAction;
         return this;
     }
 }

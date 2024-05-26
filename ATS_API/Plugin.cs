@@ -14,10 +14,13 @@ using BepInEx.Logging;
 using Eremite;
 using Eremite.Buildings;
 using Eremite.Buildings.UI;
+using Eremite.Characters.Villagers;
 using Eremite.Controller;
+using Eremite.Controller.Generator;
 using Eremite.Model;
 using Eremite.Model.Needs;
 using Eremite.Services;
+using Eremite.View.HUD;
 using Eremite.WorldMap.UI.CustomGames;
 using HarmonyLib;
 using UnityEngine;
@@ -33,7 +36,7 @@ public class Plugin : BaseUnityPlugin
     public static Plugin Instance;
     public static ManualLogSource Log;
     private Harmony harmony;
-        
+    
 
     private void Awake()
     {
@@ -61,64 +64,110 @@ public class Plugin : BaseUnityPlugin
 
     private void CreateRaces()
     {
-        /*
-        NewNeed metal = new NeedsBuilder(PluginInfo.PLUGIN_GUID, "Metal").
-                   SetGoodPresentation(
-                       GoodsTypes.Ale.ToString().ToGoodsModel(),
-                       "Shardlings thrive on Ale".ToLocaText()).
-                   SetCategory(NeedCategoryTypes.Food_Need_Category.ToName().ToNeedCategoryModel()).
-                   SetEffect(ResolveEffectTypes.Motivated.ToResolveEffectModel());
-        */
+        //NewNeed clay = new NeedsBuilder(PluginInfo.PLUGIN_GUID, "Clay").
+        //           SetGoodPresentation(
+        //               GoodsTypes.Clay.ToName().ToGoodsModel(),
+        //               "Shardlings thrive on Clay".ToLocaText()).
+        //           SetCategory(NeedCategoryTypes.Food_Need_Category.ToName().ToNeedCategoryModel()).
+        //           SetEffect(ResolveEffectTypes.Motivated.ToResolveEffectModel());
         
-        
-        _ = new RaceBuilder(PluginInfo.PLUGIN_GUID, "Shardling", "Shardling")
-            .CopyPrefab(RaceTypes.Harpy.ToRaceModel())
-            //.Copy(RaceTypes.Harpy.ToRaceModel())
+        var shardlings = new RaceBuilder(PluginInfo.PLUGIN_GUID, "Shardling", "Shardling")
+            .CopyPrefabs(RaceTypes.Foxes.ToRaceModel())
+            .CopySounds(RaceTypes.Foxes.ToRaceModel())
+            .CopyAssignAction(RaceTypes.Foxes.ToRaceModel())
             .SetDisplayName("Shardling")
             .SetPluralName("Shardlings")
+            .SetShortDescription("Shardlings are steadfast and enduring, excelling in mining and metallurgy.")
             .SetDescription($"Shardlings are steadfast and enduring, excelling in mining (<sprite name=\"mining\">) and metallurgy (<sprite name=\"metallurgy\">). They thrive in rocky environments and are extremely resilient. While their stone-like bodies make them very slow, they have a unique affinity for storms, drawing energy from the chaotic weather.")
+            .SetOrder(4)
+            .SetMaleNames(new [] {"Fuchsite Shardglow", "Serpentine Rockward", "Flint Gemheart", "Grossular Gembright", "Epidote Stonewrath", "Aragonite Gemshield", "Crystal Riftwalker", "Garnet Stoneweaver", "Cobalt Shardveil", "Andalusite Shardwielder", "Azurite Stoneflare", "Granite Gemforge", "Quartz Veinbinder", "Zeolite Rockseer", "Jasper Cragspark", "Beryl Stonecarve", "Bronzite Gemhammer", "Topaz Rockgleam", "Peridot Gemshaper", "Dumortierite Stonecaller", "Ammonite Gemglow", "Rhodonite Veincrush", "Selenite Stonebringer", "Rhyolite Gemstone", "Tantalite Stoneguardian", "Obsidian Shardspire", "Variscite Gemhold", "Hematite Shardclash", "Ulexite Shardstorm", "Carnelian Rockguard", "Smithsonite Gemstrike", "Lazurite Gemkeeper", "Tektite Rockbreaker", "Orthoclase Stonebender", "Morganite Rockshaper", "Galena Shardblight", "Wulfenite Stonecaster", "Stibnite Stoneblaze", "Onyx Shardflare", "Malachite Shardstrike", "Pyrite Veinstone", "Basalt Stonefist", "Yttrium Gemspire", "Petalite Shardfire", "Kyanite Shardforge", "Hypersthene Rockwhisper", "Xenotime Shardlash", "Chalcedony Rockcrusher", "Labradorite Gemflame", "Aventurine Stonewrath"})
+            .SetFemaleNames(new [] {"Tourmalina Veinshaper", "Xyla Gemglint", "Pyra Gemstrike", "Tanza Gemflare", "Lepida Rockbender", "Halina Shardgleam", "Zeola Shardwhisper", "Turquina Stonegleam", "Coralia Shardlight", "Nephra Shardcaster", "Zira Stoneglow", "Diamanda Shardglow", "Citrina Gemshine", "Epi Gemshaper", "Azura Gemflow", "Micara Shardveil", "Yara Stonebloom", "Rosalia Stonebloom", "Opal Rockwarda", "Una Shardbringer", "Flora Gemcaster", "Dola Shardwave", "Blooda Shardshade", "Morgana Gemwarden", "Aqua Gemflow", "Seraphina Shardflame", "Ambra Rockbreaker", "Quartzy Stonebearer", "Rubina Stoneglint", "Smokya Stonebearer", "Celestia Rockguardian", "Obsidia Stoneglow", "Wulfa Shardflame", "Lapis Shardbrighte", "Jetta Gemflare", "Agata Stonecaller", "Chrysa Rockseer", "Amethysa Shardshield", "Rhoda Shardveil", "Dana Shardstrike", "Iola Stonebringer", "Eudalia Stoneweaver", "SmokOpal Rockwarda", "Esmeralda Shardgleam", "Jada Stonebearer", "Kuni Shardlight", "Sapphira Veinscribe", "Garneta Rockblaze", "Moona Gemshade", "Vesuvi Rockgleam", "Rhodona Stoneglimmer", "Aventina Gemwhisper"})
+            .SetBaseSpeed(1.4f)
+            .SetInitialResolve(15)
+            .SetMinResolve(0)
+            .SetMaxResolve(50)
+            .SetResolvePositiveChangePerSec(0.1f)
+            .SetResolveNegativeChangePerSec(0.1f)
+            .SetResolveNegativeChangeDiffFactor(0.1f)
+            .SetReputationPerSec(0.0005f)
+            .SetMinPopulationToGainReputation(1)
+            .SetResolveForReputationThreshold(new Vector2(30f, 50f))
+            .SetMaxReputationFromResolvePerSec(10f)
+            .SetReputationThresholdIncreasePerReputation(10f)
+            .SetResolveToReputationRatio(0.1f)
+            .SetPopulationToReputationRatio(0.7f)
+            .SetResilienceLabel("Very High".ToLocaText())
             .SetNeeds(
-                NeedTypes.Any_Housing.ToName().ToNeedModel(), 
-                NeedTypes.Luxury.ToName().ToNeedModel(), 
-                NeedTypes.Pickled_Goods.ToName().ToNeedModel(), 
+                NeedTypes.Any_Housing.ToName().ToNeedModel(),
+                NeedTypes.Fox_Housing.ToName().ToNeedModel(),
+                NeedTypes.Porridge.ToName().ToNeedModel(), 
                 NeedTypes.Treatment.ToName().ToNeedModel()/*,
-                metal.model*/) // Needs 8?
-            .SetRacialHousingNeed(NeedTypes.Human_Housing)
+                clay.model*/)
+            .SetRacialHousingNeed(NeedTypes.Fox_Housing)
+            .SetNeedsInterval(240f)
+            .SetHungerTolerance(15)
+            .SetHungerEffect(ResolveEffectTypes.Hunger_Penalty)
             .SetCharacteristics(new RaceCharacteristicModel[]
             {
                 new RaceCharacteristicBuilder(BuildingTagTypes.Tech)
                     .SetEffect(VillagerPerkTypes.Proficiency),
-                new RaceCharacteristicBuilder(BuildingTagTypes.Wood)
-                    .SetEffect(VillagerPerkTypes.Proficiency)
-                //todo add global hearth effect?
+                new RaceCharacteristicBuilder(BuildingTagTypes.Rainwater)
+                    .SetEffect(VillagerPerkTypes.Comfortable_Job)
+                //todo add shardling_hearth effect
             })
-            .SetInitialEffects(ResolveEffectTypes.Vitality)
-            .SetDeathEffect(EffectTypes.Bricks_4)
-            .SetRevealEffects(EffectTypes.Stone_3pm)
-            .SetHungerEffect(ResolveEffectTypes.Hunger_Penalty);
+            .SetDeathEffect(EffectTypes.Villager_Death_Reputation_Penalty);
         
-        Log.LogError($"HERE YOU IDIOT:");
-        foreach (var race in SO.Settings.Needs.Where(n => n.category.name == NeedCategoryTypes.Services_Need_Category.ToName()).Distinct())
-        {
-            Log.LogError($"{race}. {race.GetType()}. {race.presentation}, {race.presentation.GetType()}");
-        }
-        
-        foreach (var race in SO.Settings.Needs.Select(n => n.presentation).Distinct())
-        {
-            if (race is GoodPresentationModel gp)
+        var scarabs = new RaceBuilder(PluginInfo.PLUGIN_GUID, "Scarab", "Scarab")
+            .CopyPrefabs(RaceTypes.Lizard.ToRaceModel())
+            .CopySounds(RaceTypes.Lizard.ToRaceModel())
+            .CopyAssignAction(RaceTypes.Lizard.ToRaceModel())
+            .SetDisplayName("Scarab")
+            .SetPluralName("Scarabs")
+            .SetShortDescription("Scarabs are strong race, using its strength to collect resources and survive. They are proud of their work and tenacity.")
+            .SetDescription($"Scarabs are very strong creatures. They excel at working on buildings that produce clay, stone and metal. Their affinity to the farmlands allow them to feel comfortable when working on buildings that are built on fertile soil such as farms.")
+            .SetOrder(4)
+            .SetMaleNames(new [] {"Scarabos Elytron", "Chitron Carapace", "Beetlor Mandible", "Mandrix Antenna", "Thoraxius Elytra", "Antarion Segmin", "Krito Thoraxis", "Carabus Scarabaeus", "Lucano Cervus", "Dynastes Titanus", "Sphero Tarsalis", "Melolonth Vespidae", "Tarsus Chitin", "Coleon Verduro", "Tenebrix Fovea"})
+            .SetFemaleNames(new [] {"Scarabella Elytra", "Chrysia Mandibella", "Beetlia Antenna", "Mandra Carapacea", "Thoraxa Elytrina", "Antaria Segmina", "Kritona Thoracina", "Carabella Scarabina", "Lucina Cervina", "Dynastia Titanessa", "Spherina Tarsalia", "Melora Vespa", "Tarsina Chitina", "Colea Verda", "Tenebria Foveata"})
+            .SetBaseSpeed(1.8f)
+            .SetInitialResolve(12)
+            .SetMinResolve(0)
+            .SetMaxResolve(75)
+            .SetResolvePositiveChangePerSec(0.18f)
+            .SetResolveNegativeChangePerSec(0.06f)
+            .SetResolveNegativeChangeDiffFactor(0.1f)
+            .SetReputationPerSec(0.00025f)
+            .SetMinPopulationToGainReputation(1)
+            .SetResolveForReputationThreshold(new Vector2(20f, 75f))
+            .SetMaxReputationFromResolvePerSec(25f)
+            .SetReputationThresholdIncreasePerReputation(9f)
+            .SetResolveToReputationRatio(0.1f)
+            .SetPopulationToReputationRatio(0.7f)
+            .SetResilienceLabel("Very High".ToLocaText())
+            .SetNeeds(
+                NeedTypes.Any_Housing.ToName().ToNeedModel(),
+                NeedTypes.Lizard_Housing.ToName().ToNeedModel(),
+                NeedTypes.Porridge.ToName().ToNeedModel(), 
+                NeedTypes.Biscuits.ToName().ToNeedModel(), 
+                NeedTypes.Pickled_Goods.ToName().ToNeedModel(), 
+                NeedTypes.Leasiure.ToName().ToNeedModel(), 
+                NeedTypes.Treatment.ToName().ToNeedModel(), 
+                NeedTypes.Luxury.ToName().ToNeedModel()/*,
+                clay.model*/)
+            .SetRacialHousingNeed(NeedTypes.Lizard_Housing)
+            .SetNeedsInterval(160f)
+            .SetHungerTolerance(8)
+            .SetHungerEffect(ResolveEffectTypes.Hunger_Penalty)
+            .SetHostilityPenalty(ResolveEffectTypes.New_Year_Penalty)
+            .SetCharacteristics(new RaceCharacteristicModel[]
             {
-                Log.LogError($"{gp}\n{gp.GetType()}\nIcon: {gp.overrideIcon}{gp.GetIcon()}{gp.GetIcon().rect}\n{gp.good}\n{gp.description}\n{gp.formatDescription}");
-            }
-            else if(race is HousePresentationModel hp)
-            {
-                Log.LogError($"{hp}\n{hp.GetType()}\nIcon: {hp.overrideIcon}{hp.GetIcon()}\n{hp.houses}");
-            }
-            else
-            {
-                Log.LogError($"{race}, {race.GetType()}, {race.overrideIcon}");
-            }
-            //Log.LogError($"{race}. {race.GetType()}\n{race.missingThought}\n{race.orderDescription}\n{race.overrideIcon}\n{race.IsGoodBased}");
-        }
+                new RaceCharacteristicBuilder(BuildingTagTypes.Wood)
+                    .SetEffect(VillagerPerkTypes.Proficiency),
+                new RaceCharacteristicBuilder(BuildingTagTypes.Farming)
+                    .SetEffect(VillagerPerkTypes.Comfortable_Job)
+                //todo add scarab_hearth effect
+            })
+            .SetDeathEffect(EffectTypes.Villager_Death_Reputation_Penalty);
+            //tood add 1 free small cache break
     }
 
     private void LateUpdate()
@@ -168,48 +217,6 @@ public class Plugin : BaseUnityPlugin
         
         
         // ExportWikiInformation();
-        
-        /*
-        Log.LogError($"HERE YOU IDIOT");
-        
-        //foreach (var effect in SO.Settings.resolveEffects)
-        //{
-        //    Log.LogWarning($"{effect},");
-        //}
-        foreach (var race in SO.Settings.Races)
-        {
-            Log.LogError($"{race}");
-            foreach (var model in race.characteristics)
-            {
-                Log.LogWarning($"Tag: {model.tag}\nEffect: {model.effect}\nGlobal: {model.globalEffect}\nBuilding:{model.buildingPerk}");
-            }
-        }
-        Log.LogError($"HERE TOO");
-        foreach (var perk in SO.Settings.buildingsTags)
-        {
-            Log.LogWarning($"{perk}");
-        }
-        
-        Log.LogError($"HERE TOO");
-        foreach (var perk in SO.Settings.villagersPerks)
-        {
-            Log.LogWarning($"{perk}");
-        }
-        
-        var count = 0;
-        foreach (var race in SO.Settings.Races)
-        {
-            Instance.Logger.LogInfo($"RACE: {race} {count++}");
-            
-            Instance.Logger.LogInfo(race.ToNiceString());
-            
-            //var convert = JsonConvert.SerializeObject(race, new JsonSerializerSettings()
-            //{
-            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            //});
-            //Instance.Logger.LogInfo($"{convert}");
-        }
-        */
     }
 
     [HarmonyPatch(typeof(RacesMenu), nameof(RacesMenu.SetUpSlot))]
@@ -227,6 +234,38 @@ public class Plugin : BaseUnityPlugin
         return true;
     }
 
+    [HarmonyPatch(typeof(VillagersService), nameof(VillagersService.SpawnVillagerAt))]
+    [HarmonyPostfix]
+    private static void SpawnVillagerAt(Villager __result)
+    {
+        ColorCustomRaces(__result);
+    }
+
+    [HarmonyPatch(typeof(GameLoader), nameof(GameLoader.CreateVillager))]
+    [HarmonyPrefix]
+    private static bool CreateVillager(VillagerState state)
+    {
+        var villager = UnityEngine.Object.Instantiate<Villager>(MB.Settings.GetRace(state.race).GetPrefabFor(state.isMale));
+        villager.Restore(state);
+        ColorCustomRaces(villager);
+        return false;
+    }
+
+    private static void ColorCustomRaces(Villager villager)
+    {
+        Log.LogWarning($"SpawnVillagerAt for Villager {villager}");
+        if (RaceManager.NewRaces.Any(newRace => newRace.model == villager.raceModel))
+        {
+            Log.LogWarning($"Villager has custom race {villager.raceModel}");
+            var sphere = GameObject.CreatePrimitive(villager.raceModel.name.Contains("Scarab") ? PrimitiveType.Sphere : PrimitiveType.Cube);
+            sphere.name = "[MOD] Custom Race Visual";
+            sphere.transform.SetParent(villager.transform);
+            sphere.transform.localPosition = new Vector3(0f, 1.5f, 0f);
+            sphere.transform.localRotation = Quaternion.identity;
+            sphere.transform.localScale = Vector3.one * 0.25f;
+        }
+    }
+
     [HarmonyPatch(typeof(GameController), nameof(GameController.StartGame))]
     [HarmonyPostfix]
     private static void HookEveryGameStart()
@@ -237,22 +276,5 @@ public class Plugin : BaseUnityPlugin
         Instance.Logger.LogInfo($"Entered a game. Is this a new game: {isNewGame}.");
         // TextMeshProManager.Instantiate();
         
-    }
-    
-    [HarmonyPatch(typeof(CustomGameRacesPanel), nameof(CustomGameRacesPanel.SetUpSlots))]
-    [HarmonyPrefix]
-    private static bool HookEveryGameStart(CustomGameRacesPanel __instance)
-    {
-        /*
-        SO.MetaStateService.Content.races.Add(_newRace.raceModel.Name);
-        var service = SO.MetaConditionsService;
-        foreach (RaceModel race in MB.Settings.Races)
-        {
-            bool isEssential = service.IsEssential(race.Name);
-            bool isInContent = Serviceable.MetaStateService.Content.races.Contains(race.Name);
-            Instance.Logger.LogError($"RACE: {race}, is unlocked: {MB.MetaConditionsService.IsUnlocked(race)}: {isEssential} or {isInContent}");
-        }
-        */
-        return true;
     }
 }

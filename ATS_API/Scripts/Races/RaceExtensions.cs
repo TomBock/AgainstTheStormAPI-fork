@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using Eremite.Model;
 using UnityEngine;
 
 namespace ATS_API.Scripts.Races;
@@ -35,23 +36,31 @@ public static class RaceExtensions
                     {
                         foreach (var item in enumerable)
                         {
-                            if (item is UnityEngine.Object childObj)
+                            if (item is RaceCharacteristicModel raceCharacteristicModel)
                             {
-                                sb.AppendLine(childObj.ToNiceString(depth + 1, maxDepth));
+                                sb.Append($"{raceCharacteristicModel.tag}: {raceCharacteristicModel.effect} {raceCharacteristicModel.globalEffect}, {raceCharacteristicModel.globalEffect}, ");
+                            }
+                            else if (item is UnityEngine.Object childObj)
+                            {
+                                sb.Append($"{childObj}, ");
+
+                                //sb.AppendLine(childObj.ToNiceString(depth + 1, maxDepth));
                             }
                             else
                             {
-                                sb.AppendLine($"{indent}  {item}");
+                                sb.Append($"{item}, ");
                             }
                         }
                     }
+                    sb.Append("\n");
                 }
                 else if (value is UnityEngine.Object childObj)
                 {
                     sb.AppendLine($"{indent}{field.Name}: Child Object (Type: {childObj.GetType().Name})");
                     if (depth < maxDepth)
                     {
-                        sb.AppendLine(childObj.ToNiceString(depth + 1, maxDepth));
+                        sb.AppendLine($"{childObj}");
+                        //sb.AppendLine(childObj.ToNiceString(depth + 1, maxDepth));
                     }
                 }
                 else
